@@ -23,10 +23,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Extract project ZIP
+      - name: Extract project
         run: |
           mkdir project
           unzip -o MAXDIS_PROJECT_UPLOAD.zip -d project
+
+      - name: Fix Java and Kotlin targets
+        run: |
+          sed -i '/defaultConfig {/i\    compileOptions {\n        sourceCompatibility JavaVersion.VERSION_17\n        targetCompatibility JavaVersion.VERSION_17\n    }\n    kotlinOptions {\n        jvmTarget = "17"\n    }' project/app/build.gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
